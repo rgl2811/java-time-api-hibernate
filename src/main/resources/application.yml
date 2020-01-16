@@ -1,0 +1,16 @@
+spring:
+  mvc.throw-exception-if-no-handler-found: true
+  resources.add-mappings: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/timezonetest?useSSL=false&connectionTimeZone=LOCAL&forceConnectionTimeZoneToSession=true
+    username: root
+    password:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: test
+      minimum-idle: 1
+      maximum-pool-size: 1
+      connection-timeout: 60000
+  jpa.hibernate.ddl-auto: validate
+  jpa.show-sql: true
