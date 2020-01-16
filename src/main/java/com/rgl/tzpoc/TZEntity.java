@@ -26,6 +26,7 @@ class TZEntity {
     @CreationTimestamp
     private OffsetDateTime dateCreatedOffsetDateTime;
     private OffsetDateTime dateOffset;
+    private OffsetDateTime dateOffsetLocal;
     //Avoid interconversion
     private ZonedDateTime zonedDateTimeAmerica;
     private ZonedDateTime zonedDateTimeLocal;
@@ -86,5 +87,13 @@ class TZEntity {
 
     public Instant getInstant() {
         return instant;
+    }
+
+    public OffsetDateTime getDateOffsetLocal() {
+        return dateOffsetLocal;
+    }
+
+    public void setDateOffsetLocal(OffsetDateTime dateOffsetLocal) {
+        this.dateOffsetLocal = dateOffsetLocal;
     }
 }

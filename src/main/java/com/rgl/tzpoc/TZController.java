@@ -21,13 +21,16 @@ public class TZController {
         this.repo = repo;
     }
 
-    @RequestMapping(value = "/")
-    public TZEntity test() {
+    @RequestMapping(value = "/entities")
+    public TZEntity create() {
         TZEntity entity = new TZEntity();
-
+        //Cuando se guarda se guarda, se termina guardando como hora local.
         OffsetDateTime dt = OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC).toOffsetDateTime();
         entity.setDateOffset(dt);
 
+        OffsetDateTime offsetDateTimeLocal = OffsetDateTime.now();
+        entity.setDateOffsetLocal(offsetDateTimeLocal);
+        // Cuando se guarda se pierde el offset y se guarda con hora local
         ZonedDateTime zonedDateTimeAmerica = ZonedDateTime.now(ZoneId.of("America/Virgin"));
         entity.setZonedDateTimeAmerica(zonedDateTimeAmerica);
 
@@ -50,11 +53,19 @@ public class TZController {
         return entity;
     }
 
-    @RequestMapping(value = "/{id}")
-    public TZEntity testGet(@PathVariable("id") long id) {
+    @RequestMapping(value = "/entities/{id}")
+    public TZEntity get(@PathVariable("id") long id) {
         Optional<TZEntity> entity = repo.findById(id);
+
+        if (!entity.isPresent()) {
+            return null;
+        }
+
+        //El offset se pierde. Cuando se recupera hay que reconvertir
         entity.get().setZonedDateTimeAmerica(entity.get().getZonedDateTimeAmerica().withZoneSameInstant(ZoneId.of("America/Virgin")));
+        // En la base se guardó como local, hay que reconvertirs
+        entity.get().setDateOffset(entity.get().getDateOffset().atZoneSameInstant(ZoneOffset.UTC).toOffsetDateTime());
+
         return entity.orElse(null);
     }
-
 }
